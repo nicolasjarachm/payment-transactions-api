@@ -1,15 +1,20 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-class Transaction(BaseModel): # Definimos un modelo de datos para las transacciones
-    user: str
-    amount: float
-    status: str
+from pydantic import BaseModel, Field # Importamos Field para agregar validaciones a los campos del modelo de datos
+from datetime import datetime
 
 app = FastAPI()
 
 transactions = []
 
+#creamos un modelo de datos para las transacciones utilizando Pydantic
+class Transaction(BaseModel):
+    user: str = Field(min_length=3) # Agregamos una validación para que el nombre de usuario tenga al menos 3 caracteres
+    amount: float = Field(gt=0) # Agregamos una validación para que el monto de la transacción sea mayor a 0
+    status: str
+    created_at: Field(default_factory=datetime.now)
+
+
+#endpoints de la API
 @app.get("/") #creamos un endpoint para la raíz de la API
 def home():
     return {"message": "API funcionando 🚀"}
