@@ -11,7 +11,7 @@ class Transaction(BaseModel):
     user: str = Field(min_length=3) # Agregamos una validación para que el nombre de usuario tenga al menos 3 caracteres
     amount: float = Field(gt=0) # Agregamos una validación para que el monto de la transacción sea mayor a 0
     status: str
-    created_at: Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=datetime.now)
 
 
 #endpoints de la API
