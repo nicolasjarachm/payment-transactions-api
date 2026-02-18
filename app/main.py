@@ -4,7 +4,6 @@ from app.routes.transactions import router # Importamos el router de transaccion
 # Creamos la aplicación FastAPI
 app = FastAPI()
 
-<<<<<<< HEAD
 # Endpoint de prueba para verificar que la API está funcionando
 @app.get("/")
 
