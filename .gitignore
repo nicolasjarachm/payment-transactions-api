@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
+.idea/
+# Ignorar archivos de configuración de la base de datos (si se utiliza una)
