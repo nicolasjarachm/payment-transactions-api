@@ -10,3 +10,6 @@ class DBTransaction(Base):
     amount = Column(Float)
     status = Column(String)
     created_at = Column(DateTime, default=datetime.now)
+
+#Esto solo representa
+#la estructura de la tabla en la base de datos

@@ -20,3 +20,8 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
+#Que hace:
+#Crea SQLlite
+#Define sesiones
+#Define base para modelos de datos
+

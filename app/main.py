@@ -17,10 +17,9 @@ app = FastAPI()
 # Crear tablas automáticamente al iniciar la app
 Base.metadata.create_all(bind=engine)
 
-# Ruta de prueba para verificar que la API está funcionando correctamente
-@app.get("/")
-def home():
-    return {"message": "API funcionando 🚀"}
 
 # Incluimos el router de transacciones en la aplicación principal para que las rutas definidas en el router estén disponibles
 app.include_router(router)
+
+#Importante
+#import db transaction es obligatorio para crear la tabla en SQLAlchemy

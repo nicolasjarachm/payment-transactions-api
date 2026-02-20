@@ -16,3 +16,6 @@ class TransactionResponse(TransactionCreate):
     class Config:
         from_attributes = True
 
+#Esto sirve para
+#Validar lo que llega al POST
+#Convertir objetos DB -> JSON para las respuestas del API
