@@ -1,9 +1,18 @@
-from pydantic import BaseModel, Field # Importamos Field para agregar validaciones a los campos del modelo de datos
+#Importamos Field para agregar validaciones a los campos del modelo de datos
+from pydantic import BaseModel, Field
+#Importamos datetime para agregar un campo de fecha y hora a las transacciones
 from datetime import datetime
 
 #creamos un modelo de datos para las transacciones utilizando Pydantic
-class Transaction(BaseModel):
-    user: str = Field(min_length=3) # Agregamos una validación para que el nombre de usuario tenga al menos 3 caracteres
-    amount: float = Field(gt=0) # Agregamos una validación para que el monto de la transacción sea mayor a 0
+class TransactionCreate(BaseModel):
+    user: str = Field(min_length=3)
+    amount: float = Field(gt=0)
     status: str
-    created_at: datetime = Field(default_factory=datetime.now)
+
+class TransactionResponse(TransactionCreate):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
