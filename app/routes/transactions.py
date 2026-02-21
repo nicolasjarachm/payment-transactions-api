@@ -44,7 +44,7 @@ def get_transactions(db: Session = Depends(get_db)):
 
 from fastapi import HTTPException
 
-# GET /transactions/{id}
+
 @router.get("/transactions/{transaction_id}", response_model=TransactionResponse)
 def get_transaction_by_id(
     transaction_id: int,
@@ -64,3 +64,33 @@ def get_transaction_by_id(
 #Busca en la base de datos
 #Si no existe, devuelve un error 404
 #Si existe, devuelve la transacción encontrada (el objeto DBTransaction)
+
+
+# DELETE /transactions/{id}
+
+from fastapi import HTTPException
+
+
+@router.delete("/transactions/{transaction_id}")
+def delete_transaction(
+    transaction_id: int,
+    db: Session = Depends(get_db)
+):
+    transaction = db.query(DBTransaction).filter(
+        DBTransaction.id == transaction_id
+    ).first()
+
+    if not transaction:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    db.delete(transaction)
+    db.commit()
+
+    return {"message": "Transaction deleted successfully"}
+
+#que hace DELETE /transactions/{id}?
+#Busca por ID
+#Si no existe devuelve error 404
+#Si existe, borra la transacción y devuelve un mensaje de éxito
+#Hace commit para guardar los cambios en la base de datos
+#Devuelve un mensaje de exito
