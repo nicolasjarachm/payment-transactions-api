@@ -1,3 +1,5 @@
+#Modelo SQLAlchemy para la tabla de transacciones
+
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from datetime import datetime
 from app.db.database import Base

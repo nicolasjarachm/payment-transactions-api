@@ -20,6 +20,14 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
+# Función para obtener una sesión de la base de datos, que se puede usar como dependencia en las rutas de FastAPI
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 #Que hace:
 #Crea SQLlite
 #Define sesiones

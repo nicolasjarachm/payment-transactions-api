@@ -1,3 +1,6 @@
+#Modelo de datos para las transacciones utilizando Pydantic
+
+
 #Importamos Field para agregar validaciones a los campos del modelo de datos
 from pydantic import BaseModel, Field
 #Importamos datetime para agregar un campo de fecha y hora a las transacciones
