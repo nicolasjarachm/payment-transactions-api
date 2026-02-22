@@ -13,6 +13,7 @@ from app.models.db_transaction import DBTransaction
 # importamos los esquemas Pydantic
 from app.models.transaction import TransactionCreate, TransactionResponse
 
+
 # Creamos un router
 router = APIRouter()
 
@@ -34,11 +35,25 @@ def create_transaction(transaction: TransactionCreate, db: Session = Depends(get
 
 
 # GET /transactions
+
+from fastapi import Query
+
 @router.get("/transactions", response_model=list[TransactionResponse])
-def get_transactions(db: Session = Depends(get_db)):
+def get_transactions(
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    offset = (page - 1) * limit
 
-    return db.query(DBTransaction).all()
+    transactions = (
+        db.query(DBTransaction)
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
 
+    return transactions
 
 # GET /transactions/{id}
 
@@ -94,3 +109,38 @@ def delete_transaction(
 #Si existe, borra la transacción y devuelve un mensaje de éxito
 #Hace commit para guardar los cambios en la base de datos
 #Devuelve un mensaje de exito
+
+# PUT /transactions/{id}
+from app.models.transaction import TransactionUpdate
+
+
+@router.patch("/transactions/{transaction_id}", response_model=TransactionResponse)
+def update_transaction(
+    transaction_id: int,
+    transaction_update: TransactionUpdate,
+    db: Session = Depends(get_db)
+):
+    transaction = db.query(DBTransaction).filter(
+        DBTransaction.id == transaction_id
+    ).first()
+
+    if not transaction:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    update_data = transaction_update.dict(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(transaction, key, value)
+
+    db.commit()
+    db.refresh(transaction)
+
+    return transaction
+
+#Permite
+#exclude_unset=True, solo actualiza lo que enviamos
+#setattr para actualizar los campos dinámicamente
+#commit para guardar los cambios
+#refresh para obtener la transacción actualizada de la base de datos
+#devuelve objeto actualizado
+
