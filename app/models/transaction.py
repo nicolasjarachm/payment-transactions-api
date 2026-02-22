@@ -22,3 +22,12 @@ class TransactionResponse(TransactionCreate):
 #Esto sirve para
 #Validar lo que llega al POST
 #Convertir objetos DB -> JSON para las respuestas del API
+
+#Permite actualizar parcialmente una transacción
+from typing import Optional
+
+class TransactionUpdate(BaseModel):
+    user: Optional[str] = None
+    amount: Optional[float] = None
+    status: Optional[str] = None
+
