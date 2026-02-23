@@ -33,22 +33,21 @@ This project simulates a simplified fintech backend system with transaction mana
 
 ## 📁 Project Structure
 
+```text
 app/
 │
 ├── main.py
 ├── database.py
 │
 ├── models/
-│ └── transaction.py
+│   └── transaction.py
 │
 ├── routes/
-│ └── transactions.py
+│   └── transactions.py
 │
 └── schemas/
-└── transaction.py
-
-
----
+    └── transaction.py
+```
 
 ## 📊 Pagination Example
 
