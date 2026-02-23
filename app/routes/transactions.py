@@ -13,6 +13,9 @@ from app.models.db_transaction import DBTransaction
 # importamos los esquemas Pydantic
 from app.models.transaction import TransactionCreate, TransactionResponse
 
+# importamos el modelo para la paginación de transacciones
+from app.models.transaction import PaginatedTransactions
+
 
 # Creamos un router
 router = APIRouter()
@@ -35,25 +38,51 @@ def create_transaction(transaction: TransactionCreate, db: Session = Depends(get
 
 
 # GET /transactions
+#Endpoint para obtener una lista de transacciones con paginación
 
 from fastapi import Query
+import math
 
-@router.get("/transactions", response_model=list[TransactionResponse])
+@router.get("/transactions", response_model=PaginatedTransactions)
 def get_transactions(
     page: int = Query(1, ge=1),
     limit: int = Query(10, ge=1, le=100),
+    status: str | None = Query(None),
     db: Session = Depends(get_db)
 ):
+    query = db.query(DBTransaction)
+
+    if status:
+        query = query.filter(DBTransaction.status == status)
+
+    total = query.count()
+
     offset = (page - 1) * limit
 
     transactions = (
-        db.query(DBTransaction)
+        query
         .offset(offset)
         .limit(limit)
         .all()
     )
 
-    return transactions
+    total_pages = math.ceil(total / limit) if total > 0 else 1
+
+    return {
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "total_pages": total_pages,
+        "data": transactions
+    }
+
+#Que hace GET /transactions?
+#Recibe parámetros de paginación (page y limit) desde la URL
+#Calcula el offset para la consulta a la base de datos
+#Realiza una consulta a la base de datos
+#Devuelve una lista de transacciones según la página y el límite especificados
+
+
 
 # GET /transactions/{id}
 

@@ -31,3 +31,12 @@ class TransactionUpdate(BaseModel):
     amount: Optional[float] = None
     status: Optional[str] = None
 
+class PaginatedTransactions(BaseModel):
+    total: int
+    page: int
+    limit: int
+    total_pages: int
+    data: list[TransactionResponse]
+
+
+
